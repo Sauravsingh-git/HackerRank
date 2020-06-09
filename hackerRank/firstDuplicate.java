@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Solution {
 	
 	public static int  FirstDuplicate (int [] n) {
-		int i;
+		int i; 
 		for ( i = 0; i < n.length; i++) {
 			if ( n[Math.abs(n[i]) - 1] < 0) {
 				return n[i];
