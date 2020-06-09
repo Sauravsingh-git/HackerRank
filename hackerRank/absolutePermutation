@@ -21,7 +21,7 @@ public class Solution {
         {
             if (Math.abs(arr[i] - (i + 1)) == k) continue;
             int newVal = (i + 1) + k;
-            if (newVal > n || newVal < 1) return new int[] { -1};
+            if (newVal > n ) return new int[] { -1};
             int temp = arr[i];
             arr[i] = arr[newVal - 1];
             arr[newVal - 1] = temp;
