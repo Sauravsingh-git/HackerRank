@@ -1,4 +1,4 @@
-import java.io.*;
+ import java.io.*;
 import java.math.*;
 import java.security.*;
 import java.text.*;
@@ -8,31 +8,24 @@ import java.util.regex.*;
 
 public class Solution {
 
-   
-    static String appendAndDelete(String given, String desired, int k) {
+    
+    static String appendAndDelete(String s, String t, int k) {
 
-        if(given.equals(desired))
-            return "Yes";
-
-        String checkString = desired;
-
-        boolean isFound = false;
-        while(!checkString.isEmpty()){
-            if(given.contains( checkString )){
-                isFound = true;
-                break;
-            }else
-                checkString = checkString.substring(0, checkString.length()-1);
+        int l = Math.min(s.length(), t.length());
+        
+        int i = 0;
+        while (i < l  && s.charAt(i) == t.charAt(i)){
+            i++;
         }
 
-        int diff=Math.abs(given.length()-checkString.length());
-        int diff2=Math.abs(desired.length()-checkString.length());
-
-        if(diff+diff2<=k && ((k -(diff + diff2))%2==0 || given.length()+desired.length()    <=k ))
-            return "Yes";
+        int totaloperations = s.length() - i + t.length() - i ;
+        if(totaloperations <= k && ((k - totaloperations) % 2 == 0|| s.length() + t.length() <= k))
+        return "Yes";
+        else
         return "No";
+
     }
-    
+
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
