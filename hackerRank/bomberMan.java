@@ -1,114 +1,91 @@
-import java.io.*;
-import java.math.*;
-import java.security.*;
-import java.text.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.regex.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
-public class Solution {
+public class Solutions {
 
-    // Complete the bomberMan function below.
-    static String[] bomberMan(int n, String[] grid) {
-        char[][] ar = new char[grid.length][];
-        char [][] ar1 = new char [grid.length][grid[0].length()];
-        for(char[] c : ar1){
-            Arrays.fill(c, 1);
-        }
+	private static Scanner sc = new Scanner(System.in);
 
-        char [][] ar2 = new char [grid.length][grid[0].length()];
-        for(char[] c : ar2){
-            Arrays.fill(c, 1);
-        }
+	public static void main(String[] args) {
 
-        for ( int i = 0; i < grid.length; i++)
-        ar[i] = grid[i].toString();
-        // if n is less than or equal to 1, same array will be returned
-        if(n >= 1)
-        for (int i = 0; i < ar.length; i++)
-        for(int j = 0; j < ar[0].length; j++)
-        System.out.print(ar[i][j]);
+		String[] rcn = sc.nextLine().split(" ");
 
-        //the field will always be covered with bombs for every multiple of 2
+		int r = Integer.parseInt(rcn[0]);
+		int c = Integer.parseInt(rcn[1]);
+		int n = Integer.parseInt(rcn[2]);
 
-        if(n % 2 == 0)
-        for (int i = 0; i < ar.length; i++)
-        for(int j = 0; j < ar[0].length; j++)
-        System.out.print(0);
+		String[] ar = new String[r];
 
+		for (int i = 0; i < r; i++) {
+			ar[i] = sc.nextLine();
+		}
 
+		char[][] result = bomberMan(ar, n, r, c);
 
-        //first pattern
-        for(int i = 0; i < ar.length; i++){
-            for (int j = 0; j < ar[0].length; j++){
-                if(ar[i][j] == 0){
-                    ar1[i][j] = 0;
-                    if(i > 0)
-                    ar1[i - 1][j] = 0;
-                    if(i < ar.length - 1)
-                    ar1[i+1][j] = 0;
-                    if(j > 0)
-                    ar1[i][j - 1] = 0;
-                    if(j < ar.length - 1)
-                    ar1[i][j+1] = 0;
-                }
-            }
-        }
+		for (char[] t : result) {
+			for (char p : t)
+				System.out.print(p);
+			System.out.println();
+		}
 
-        if(n%4 == 30){
-            for ( int i = 0; i < ar.length; i++){
-                for ( int j = 0; j < ar[0].length; j++){
-                    if(ar1[i][j] == '1'){
-                        System.out.println(0);
-                    }
-                    else{
-                        System.out.println(.);
-                    }
-                }
-            }
-        }
+	}
 
-        for()
+	private static char[][] bomberMan(String[] ar, int n, int r, int c) {
+		char[][] a = new char[ar.length][];
+		for (int i = 0; i < ar.length; i++) {
+			a[i] = ar[i].toCharArray();
+		}
 
+		if (n <= 1)
+			return a;
+		if (n % 2 == 0)
+			return fullBombField(r, c);
+		if (n % 4 == 3)
+			return mod3(a);
+		if (n % 4 == 1)
+			return mod5(a);
 
-    }
+		return null;
+	}
 
+	static char[][] fullBombField(int r, int c) {
+		char[][] result = new char[r][c];
+		for (char[] t : result)
+			Arrays.fill(t, 'O');
 
+		return result;
 
-    private static final Scanner scanner = new Scanner(System.in);
+	}
 
-    public static void main(String[] args) throws IOException {
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+	static char[][] mod3(char[][] ar) {
+		char[][] result = new char[ar.length][ar[0].length];
+		for (char[] c : result)
+			Arrays.fill(c, 'O');
+		for (int i = 0; i < ar.length; i++) {
+			for (int j = 0; j < ar[0].length; j++) {
+				if (ar[i][j] == 'O' || deadByNeighbour(ar, i, j))
+					result[i][j] = '.';
+			}
+		}
+		return result;
+	}
 
-        String[] rcn = scanner.nextLine().split(" ");
+	static boolean deadByNeighbour(char[][] ar, int i, int j) {
 
-        int r = Integer.parseInt(rcn[0]);
+		if (i - 1 >= 0 && ar[i - 1][j] == 'O')
+			return true;
+		if (j - 1 >= 0 && ar[i][j - 1] == 'O')
+			return true;
+		if (i + 1 < ar.length && ar[i + 1][j] == 'O')
+			return true;
+		if (j + 1 < ar[0].length && ar[i][j + 1] == 'O')
+			return true;
+		return false;
+	}
 
-        int c = Integer.parseInt(rcn[1]);
+	static char[][] mod5(char[][] ar) {
+		char[][] r1 = mod3(ar);
+		char[][] result = mod3(r1);
+		return result;
+	}
 
-        int n = Integer.parseInt(rcn[2]);
-
-        String[] grid = new String[r];
-
-        for (int i = 0; i < r; i++) {
-            String gridItem = scanner.nextLine();
-            grid[i] = gridItem;
-        }
-
-        String[] result = bomberMan(n, grid);
-
-        for (int i = 0; i < result.length; i++) {
-            bufferedWriter.write(result[i]);
-
-            if (i != result.length - 1) {
-                bufferedWriter.write("\n");
-            }
-        }
-
-        bufferedWriter.newLine();
-
-        bufferedWriter.close();
-
-        scanner.close();
-    }
 }
